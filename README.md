@@ -6,7 +6,7 @@ CB-Weather is a mobile application to check very basic information about current
 
 ## Tech Stack
 
-Todo App  is created with
+CB-Weather  is created with
 - **React Native**: JavaScript library to create visually enriched User Interfaces for mobile Applications
 
 This is a mobile application created with pure React Native.
