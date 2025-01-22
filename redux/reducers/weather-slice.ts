@@ -37,7 +37,7 @@ const initialState: WeatherState = {
 export const fetchWeather = createAsyncThunk(
     'weather/fetchWeather',
     async (city: string) => {
-        const apiKey = process.env.API_KEY; 
+        const apiKey = process.env.API_KEY;
         const baseUrl = 'http://api.weatherapi.com/v1/current.json';
         const response = await axios.get(
             `${baseUrl}?key=${apiKey}&q=${city}`
@@ -49,7 +49,15 @@ export const fetchWeather = createAsyncThunk(
 const weatherSlice = createSlice({
     name: 'weather',
     initialState,
-    reducers: {},
+    reducers: {
+        // changeSelectedCity reducer'ı eklendi
+        changeSelectedCity(state, action: PayloadAction<string>) {
+            // API isteğinde kullanılacak şehir adı formatını kontrol et
+            // Örneğin, WeatherAPI için "Antalya" yerine "antalya" gerekebilir
+            const formattedCityName = action.payload.toLowerCase();
+            state.data.location.name = formattedCityName;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchWeather.pending, (state) => {
@@ -67,5 +75,6 @@ const weatherSlice = createSlice({
     },
 });
 
+export const { changeSelectedCity } = weatherSlice.actions; 
 export const weatherActions = weatherSlice.actions;
 export default weatherSlice.reducer;

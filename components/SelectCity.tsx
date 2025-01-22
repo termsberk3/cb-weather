@@ -1,18 +1,25 @@
-import React, { FC, useState, useEffect } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import { StyleSheet, View } from 'react-native';
-import axios, { AxiosResponse } from 'axios';
+import React, { useState, useEffect, FC } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import { CityProps } from '../interfaces/cities-interface';
 import { CitySelectorProps } from '../interfaces/cities-interface';
+import axios, { AxiosResponse } from 'axios';
+
+interface City {
+    label: string;
+    value: string;
+    name?: string;
+    id?: string;
+}
 
 
-const fetchTurkeyCities = async (): Promise<CityProps[]> => {
+const fetchTurkeyCities = async (): Promise<City[]> => {
     try {
         const response: AxiosResponse = await axios.get('https://turkiyeapi.dev/api/v1/provinces');
         const jsonData: { data: CityProps[] } = response.data;
-        const cityData: CityProps[] = jsonData.data.map((city): { name: string; id: string } => ({
-            name: city.name,
-            id: city.id
+        const cityData: City[] = jsonData.data.map((city) => ({
+            label: city.name,
+            value: city.name,
         }));
         return cityData;
     } catch (error) {
@@ -21,25 +28,11 @@ const fetchTurkeyCities = async (): Promise<CityProps[]> => {
     }
 };
 
-const normalizeCityName = (cityId: string, cities: { name: string, id: string }[]): string => {
-    const city = cities.find(city => city.id === cityId);
-    if (!city) {
-        return '';
-    }
-    return city.name
-        .replace(/ı/g, 'i')
-        .replace(/ğ/g, 'g')
-        .replace(/ö/g, 'o')
-        .replace(/ü/g, 'u')
-        .replace(/ş/g, 's')
-        .replace(/ç/g, 'c')
-        .replace(/Ç/g, 'C')
-        .replace(/Ş/g, 'S');
-};
+const CitySelector: FC<CitySelectorProps> = ({ onCityChange }) => {
+    const [cities, setCities] = useState<CityProps[]>([]);
+    const [selectedCity, setSelectedCity] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState(true);
 
-const CitySelector: FC<CitySelectorProps> = ({ onCityChange, selectedCity }) => {
-    const [cities, setCities] = useState<{ name: string, id: string }[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchCities = async (): Promise<void> => {
@@ -56,22 +49,57 @@ const CitySelector: FC<CitySelectorProps> = ({ onCityChange, selectedCity }) => 
         fetchCities();
     }, []);
 
+    const handleCityChange = (item: City) => {
+        setSelectedCity(item.value);
+        onCityChange(item.value);
+    };
     return (
-        <View className="border-white border-[1px] bg-white">
-            <Picker
-                selectedValue={selectedCity}
-                onValueChange={onCityChange}
-
-            >
-                {loading ? (
-                    <Picker.Item label="Yükleniyor..." value="" />
-                ) : cities.map((value) => (
-                    <Picker.Item key={value.id} label={value.name} value={normalizeCityName(value.id, cities)} />
-                ))}
-            </Picker>
+        <View style={styles.container}>
+            <Dropdown
+                style={[styles.dropdown, { borderColor: 'white' }]} // border-white
+                placeholderStyle={[styles.placeholderStyle, { color: 'white' }]} // text-white
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={cities}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={loading ? 'Yükleniyor...' : 'Şehir Seçin'}
+                searchPlaceholder="Şehir ara..."
+                value={selectedCity}
+                onChange={handleCityChange}
+            />
         </View>
     );
 };
 
+const styles = StyleSheet.create({
+    container: {
+        padding: 16,
+    },
+    dropdown: {
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+    },
+});
 
 export default CitySelector;

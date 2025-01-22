@@ -2,6 +2,8 @@ export default function translateWeatherCondition(condition: string): string {
     switch (condition) {
         case 'Clear':
             return 'Açık';
+            case 'Sunny':
+                return 'Güneşli';
         case 'Partly Cloudy':
             return 'Parçalı bulutlu';
             case 'Partly cloudy':
