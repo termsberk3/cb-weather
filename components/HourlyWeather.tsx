@@ -3,41 +3,29 @@ import React from 'react'
 import { useAppSelector } from '../redux/store';
 import translateWeatherCondition from '../utilities/LocalizedConditions';
 
-interface WeatherHour {
-    time: string;
-    temp_c: number;
-    humidity: number;
-    chance_of_rain: number;
-}
 
-interface WeatherForecast {
-    current: {
-        condition: {
-            text: string;
-        };
-    };
-    forecast: {
-        forecastday: {
-            hour: WeatherHour[];
-        }[];
-    };
-}
-
-const HourlyWeather: React.FC = () => {
+const HourlyWeather = ({ day = 0 }) => {
     const weatherData = useAppSelector((state) => state.weather);
+    const hourlyWeatherData = weatherData.data.forecast.forecastday[day]?.hour || [];
     const currentHour = new Date().getHours();
     const translatedCondition = translateWeatherCondition(weatherData.data.current.condition.text);
-    const filteredHoursToday = weatherData.data.forecast.forecastday[0]?.hour.filter(item => {
+    if (!weatherData) {
+        return null; // veya bir yükleme göstergesi
+    }
+
+    const daysOfWeek = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+
+    const filteredHours = hourlyWeatherData.filter(item => {
         const hour = parseInt(item.time.slice(11, 13), 10);
-        return hour >= currentHour;
+        return day === 0 ? hour >= currentHour : true;
     });
+
 
     return (
         <View className="pt-2 h-full flex-1">
             <SectionList
                 sections={[
-                    { title: 'Bugün', data: filteredHoursToday || [] },
-                    { title: 'Yarın', data: weatherData.data.forecast.forecastday[1]?.hour || [] },
+                    { title: 'Saatlik', data: filteredHours },
                 ]}
                 keyExtractor={(item) => item.time}
                 renderItem={({ item }) => (
@@ -60,9 +48,9 @@ export default HourlyWeather
 
 const styles = StyleSheet.create({
     sectionHeader: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
-        backgroundColor: 'lightgray',
+        backgroundColor: 'white',
         padding: 10,
     },
 });

@@ -4,12 +4,14 @@ import { useAppSelector } from '../redux/store';
 import translate from 'googletrans';
 import translateWeatherCondition from '../utilities/LocalizedConditions';
 
-const CurrentWeather = () => {
+const CurrentWeather = ({ day = 0 }) => {
     const [translatedLocationCountry, setTranslatedLocationCountry] = useState('');
     const weatherData = useAppSelector((state) => state.weather);
-    const translatedCondition = translateWeatherCondition(weatherData.data.current.condition.text);
+    const currentWeatherData = weatherData.data.forecast.forecastday[day];
+    const translatedCondition = translateWeatherCondition(currentWeatherData?.day.condition.text);
     const loading = useAppSelector((state) => state.weather.data.loading);
     const error = useAppSelector((state) => state.weather.data.error);
+    
 
     useEffect(() => {
         const translateLocationCountry = async () => {
@@ -36,25 +38,22 @@ const CurrentWeather = () => {
                 {weatherData.data.location.name}, {translatedLocationCountry}
             </Text>
             <Text className="text-default font-bold text-2xl mb-4">
-                {new Date(weatherData.data.location.localtime).toLocaleDateString('tr-TR', { weekday: 'long' })} , {new Date(weatherData.data.location.localtime).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                {new Date(currentWeatherData?.date).toLocaleDateString('tr-TR', { weekday: 'long' })} , {new Date(currentWeatherData?.date).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
             </Text>
             <Text className="text-default text-4xl mb-4">
-                {weatherData.data.current.temp_c} °C
+                {currentWeatherData?.day.avgtemp_c} °C
             </Text>
             <Text className="text-default text-lg mb-2">
                 Durum: {translatedCondition}
             </Text>
             <Text className="text-default text-lg mb-2">
-                Hissedilen Sıcaklık: {weatherData.data.current.feelslike_c} °C
+                Max.Rüzgar Hızı: {currentWeatherData?.day.maxwind_kph} km/h
             </Text>
             <Text className="text-default text-lg mb-2">
-                Rüzgar Hızı: {weatherData.data.current.wind_kph} km/h
+                Ortalama Nem: {currentWeatherData?.day.avghumidity}%
             </Text>
             <Text className="text-default text-lg mb-2">
-                Nem: {weatherData.data.current.humidity}%
-            </Text>
-            <Text className="text-default text-lg mb-2">
-                Yağış: {weatherData.data.current.precip_mm}mm
+                Toplam Yağış: {currentWeatherData?.day.totalprecip_mm}mm
             </Text>
         </View>
     )

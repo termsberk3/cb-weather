@@ -2,11 +2,11 @@ export default function translateWeatherCondition(condition: string): string {
     switch (condition) {
         case 'Clear':
             return 'Açık';
-            case 'Sunny':
-                return 'Güneşli';
+        case 'Sunny':
+            return 'Güneşli';
         case 'Partly Cloudy':
             return 'Parçalı bulutlu';
-            case 'Partly cloudy':
+        case 'Partly cloudy':
             return 'Parçalı bulutlu';
         case 'Cloudy':
             return 'Bulutlu';
@@ -16,7 +16,7 @@ export default function translateWeatherCondition(condition: string): string {
             return 'Sisli';
         case 'Patchy rain possible':
             return 'Yer yer yağmur mümkün';
-            case 'Patchy rain nearby':
+        case 'Patchy rain nearby':
             return 'Yakınlarda düzensiz yağmur';
         case 'Patchy snow possible':
             return 'Yer yer kar mümkün';
