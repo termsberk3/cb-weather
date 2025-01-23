@@ -15,6 +15,7 @@ export interface WeatherData {
       humidity: number;
       feelslike_c: number;
       uv: number;
+      precip_mm: number
     };
     forecast: {
       forecastday: Forecastday[];

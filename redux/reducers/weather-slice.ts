@@ -25,6 +25,7 @@ const initialState: WeatherState = {
             humidity: 0,
             feelslike_c: 0,
             uv: 0,
+            precip_mm: 0,
         },
         forecast: {
             forecastday: [],
@@ -34,13 +35,14 @@ const initialState: WeatherState = {
     },
 };
 
-export const fetchWeather = createAsyncThunk(
+export const fetchCurrentWeather = createAsyncThunk(
     'weather/fetchWeather',
     async (city: string) => {
         const apiKey = process.env.API_KEY;
-        const baseUrl = 'http://api.weatherapi.com/v1/current.json';
+        const days = 7;
+        const baseUrl = 'http://api.weatherapi.com/v1/forecast.json';
         const response = await axios.get(
-            `${baseUrl}?key=${apiKey}&q=${city}`
+            `${baseUrl}?key=${apiKey}&q=${city}&days=7`
         );
         return response.data;
     }
@@ -49,32 +51,23 @@ export const fetchWeather = createAsyncThunk(
 const weatherSlice = createSlice({
     name: 'weather',
     initialState,
-    reducers: {
-        // changeSelectedCity reducer'ı eklendi
-        changeSelectedCity(state, action: PayloadAction<string>) {
-            // API isteğinde kullanılacak şehir adı formatını kontrol et
-            // Örneğin, WeatherAPI için "Antalya" yerine "antalya" gerekebilir
-            const formattedCityName = action.payload.toLowerCase();
-            state.data.location.name = formattedCityName;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchWeather.pending, (state) => {
+            .addCase(fetchCurrentWeather.pending, (state) => {
                 state.data.loading = true;
                 state.data.error = null;
             })
-            .addCase(fetchWeather.fulfilled, (state, action) => {
+            .addCase(fetchCurrentWeather.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.data.loading = false;
             })
-            .addCase(fetchWeather.rejected, (state, action) => {
+            .addCase(fetchCurrentWeather.rejected, (state, action) => {
                 state.data.loading = false;
                 state.data.error = action.error.message || 'Bir hata oluştu';
             });
     },
 });
 
-export const { changeSelectedCity } = weatherSlice.actions; 
 export const weatherActions = weatherSlice.actions;
 export default weatherSlice.reducer;

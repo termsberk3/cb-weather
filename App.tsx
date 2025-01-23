@@ -9,10 +9,8 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className='flex-1 bg-Rebecca' edges={['top', 'bottom']}>
-        <View >
           <HomeScreen />
           <StatusBar style="auto" />
-        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );

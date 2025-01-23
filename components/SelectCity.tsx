@@ -56,9 +56,9 @@ const CitySelector: FC<CitySelectorProps> = ({ onCityChange }) => {
     return (
         <View style={styles.container}>
             <Dropdown
-                style={[styles.dropdown, { borderColor: 'white' }]} // border-white
-                placeholderStyle={[styles.placeholderStyle, { color: 'white' }]} // text-white
-                selectedTextStyle={styles.selectedTextStyle}
+                style={[styles.dropdown, { borderColor: 'white' }]} 
+                placeholderStyle={[styles.placeholderStyle, { color: 'white' }]}
+                selectedTextStyle={[styles.selectedTextStyle, {color: 'white'}]}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={cities}
