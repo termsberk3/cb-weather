@@ -1,9 +1,9 @@
-import { SectionList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, View, Text, StyleSheet, Dimensions } from 'react-native';
 import React from 'react'
 import { useAppSelector } from '../redux/store';
 import translateWeatherCondition from '../utilities/LocalizedConditions';
 
-
+const numColumns = 2
 const HourlyWeather = ({ day = 0 }) => {
     const weatherData = useAppSelector((state) => state.weather);
     const hourlyWeatherData = weatherData.data.forecast.forecastday[day]?.hour || [];
@@ -13,8 +13,6 @@ const HourlyWeather = ({ day = 0 }) => {
         return null; // veya bir yükleme göstergesi
     }
 
-    const daysOfWeek = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
-
     const filteredHours = hourlyWeatherData.filter(item => {
         const hour = parseInt(item.time.slice(11, 13), 10);
         return day === 0 ? hour >= currentHour : true;
@@ -22,23 +20,20 @@ const HourlyWeather = ({ day = 0 }) => {
 
 
     return (
-        <View className="pt-2 h-full flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <SectionList
-                sections={[
-                    { title: 'Saatlik', data: filteredHours },
-                ]}
+        <View className="pt-2 h-full flex-1">
+            <FlatList
+                data={filteredHours}
                 keyExtractor={(item) => item.time}
+                numColumns={numColumns} // Sütun sayısını belirle
                 renderItem={({ item }) => (
-                    <View>
+                    <View style={styles.item}>
                         <Text className="text-default text-xl">Saat : {item.time.slice(11, 13)}:00</Text>
                         <Text className="text-default">Sıcaklık : {item.temp_c} °C</Text>
-                        <Text className="text-default">Durum : {translatedCondition}</Text>
+                        <Text className="text-default">Durum : {translateWeatherCondition(item.condition.text)}</Text>
                         <Text className="text-default">Yağmur : {item.chance_of_rain}%</Text>
                     </View>
                 )}
-                renderSectionHeader={({ section: { title } }) => (
-                    <Text style={styles.sectionHeader}>{title}</Text>
-                )}
+                ListHeaderComponent={<Text style={styles.title}>Saatlik</Text>}
             />
         </View>
     );
@@ -47,10 +42,15 @@ const HourlyWeather = ({ day = 0 }) => {
 export default HourlyWeather
 
 const styles = StyleSheet.create({
-    sectionHeader: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        backgroundColor: 'white',
-        padding: 10,
+    item: {
+        flex: 1,
+        margin: 1,
+        height: Dimensions.get('window').width / numColumns,
     },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color :"white",
+        textDecorationLine : "underline"
+    }
 });
