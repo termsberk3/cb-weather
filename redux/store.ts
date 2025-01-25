@@ -1,13 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import weatherSlice from "./reducers/weather-slice"
+import locationSlice from "./reducers/location-slice"
 
 
 //Store has been created with scalability in mind, this method of using reducers ensure addition of multiple reducers in future
 export const store = configureStore({
   reducer: {
-    weather: weatherSlice
-
+    weather: weatherSlice,
+    location: locationSlice
   },
 });
 
