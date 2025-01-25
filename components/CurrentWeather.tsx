@@ -53,7 +53,7 @@ const CurrentWeather = ({ day = 0 }) => {
                 Ortalama Nem: {currentWeatherData?.day.avghumidity}%
             </Text>
             <Text className="text-default text-lg mb-2">
-                Toplam Yağış: {currentWeatherData?.day.totalprecip_mm}mm
+                Toplam Yağış: {currentWeatherData?.day.daily_chance_of_rain}%
             </Text>
         </View>
     )

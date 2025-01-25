@@ -7,9 +7,13 @@ interface PaginationProps {
 }
 const DayPagination: React.FC<PaginationProps> = ({ currentPage, onNextPage, onPreviousPage }) => {
     return (
-        <View className="absolute bottom-20 left-0 right-0 flex-row justify-between px-4">
-            {currentPage > 0 && <Button title="<" onPress={onPreviousPage} />}
-            {currentPage < 6 && <Button title=">" onPress={onNextPage} />}
+        <View className="absolute bottom-[50%] left-0 right-0 flex-row justify-between px-4">
+            <View className="justify-start "> 
+                {currentPage > 0 && <Button color="purple" title="<" onPress={onPreviousPage} />}
+            </View>
+            <View className="justify-end">
+                {currentPage < 6 && <Button color="purple" title=">" onPress={onNextPage} />}
+            </View>
         </View>
     );
 };

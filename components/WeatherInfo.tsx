@@ -10,7 +10,7 @@ import DayPagination from './DayPagination';
 
 const WeatherInfo = () => {
   const dispatch = useAppDispatch()
-  const [selectedCity, setSelectedCity] = useState('Ankara');
+  const [selectedCity, setSelectedCity] = useState('Antalya');
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleNextPage = () => {

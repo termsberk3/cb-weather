@@ -22,7 +22,7 @@ const HourlyWeather = ({ day = 0 }) => {
 
 
     return (
-        <View className="pt-2 h-full flex-1">
+        <View className="pt-2 h-full flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <SectionList
                 sections={[
                     { title: 'Saatlik', data: filteredHours },
@@ -30,7 +30,7 @@ const HourlyWeather = ({ day = 0 }) => {
                 keyExtractor={(item) => item.time}
                 renderItem={({ item }) => (
                     <View>
-                        <Text className="text-default">Saat : {item.time.slice(11, 13)}:00</Text>
+                        <Text className="text-default text-xl">Saat : {item.time.slice(11, 13)}:00</Text>
                         <Text className="text-default">Sıcaklık : {item.temp_c} °C</Text>
                         <Text className="text-default">Durum : {translatedCondition}</Text>
                         <Text className="text-default">Yağmur : {item.chance_of_rain}%</Text>
