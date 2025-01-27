@@ -37,15 +37,18 @@ const initialState: WeatherState = {
 
 export const fetchCurrentWeather = createAsyncThunk(
     'weather/fetchWeather',
-    async (city: string) => {
-        const apiKey = process.env.API_KEY;
-        const daily = 1;
-        const weekly = 7;
-        const baseUrl = 'http://api.weatherapi.com/v1/forecast.json';
-        const response = await axios.get(
-            `${baseUrl}?key=${apiKey}&q=${city}&days=7`
-        );
-        return response.data;
+    async ({ city, days }: { city: string; days: number }, { rejectWithValue }) => {
+        try {
+            const apiKey = process.env.API_KEY;
+            const baseUrl = 'http://api.weatherapi.com/v1/forecast.json';
+            const response = await axios.get(
+                `${baseUrl}?key=${apiKey}&q=${city}&days=${days}`
+            );
+            
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || 'An error occurred');
+        }
     }
 );
 

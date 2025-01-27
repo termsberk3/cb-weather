@@ -10,7 +10,7 @@ const HourlyWeather = ({ day = 0 }) => {
     const currentHour = new Date().getHours();
     const translatedCondition = translateWeatherCondition(weatherData.data.current.condition.text);
     if (!weatherData) {
-        return null; // veya bir yükleme göstergesi
+        return null; 
     }
 
     const filteredHours = hourlyWeatherData.filter(item => {

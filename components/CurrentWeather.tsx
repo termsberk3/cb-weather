@@ -11,7 +11,7 @@ const CurrentWeather = ({ day = 0 }) => {
     const translatedCondition = translateWeatherCondition(currentWeatherData?.day.condition.text);
     const loading = useAppSelector((state) => state.weather.data.loading);
     const error = useAppSelector((state) => state.weather.data.error);
-    
+
 
     useEffect(() => {
         const translateLocationCountry = async () => {
@@ -23,7 +23,7 @@ const CurrentWeather = ({ day = 0 }) => {
 
         translateLocationCountry();
     }, [weatherData]);
-
+    
     if (loading) {
         return <Text>Yükleniyor...</Text>;
     }

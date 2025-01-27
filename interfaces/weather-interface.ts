@@ -66,3 +66,11 @@ export interface DayData {
   };
   uv: number;
 }
+
+export interface WeatherIntervalsProps {
+  forecastDays: number;
+  setForecastDays: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  open: boolean;
+  setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
