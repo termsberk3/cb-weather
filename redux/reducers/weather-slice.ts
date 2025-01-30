@@ -44,7 +44,7 @@ export const fetchCurrentWeather = createAsyncThunk(
             const response = await axios.get(
                 `${baseUrl}?key=${apiKey}&q=${city}&days=${days}`
             );
-            
+
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'An error occurred');
