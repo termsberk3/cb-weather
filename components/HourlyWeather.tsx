@@ -2,19 +2,21 @@ import { FlatList, View, Text, StyleSheet, Dimensions } from 'react-native';
 import React from 'react'
 import { useAppSelector } from '../redux/store';
 import translateWeatherCondition from '../utilities/LocalizedConditions';
+import { ForecastDayProp } from '../interfaces/weather-interface';
 
-const numColumns = 2
-const HourlyWeather = ({ day = 0 }) => {
-    const weatherData = useAppSelector((state) => state.weather);
-    const hourlyWeatherData = weatherData.data.forecast.forecastday[day]?.hour || [];
-    const currentHour = new Date().getHours();
-    const translatedCondition = translateWeatherCondition(weatherData.data.current.condition.text);
+const numColumns: number = 2;
+
+const HourlyWeather: React.FC<ForecastDayProp> = ({ day = 0 }) => {
+    const weatherData: any = useAppSelector((state: any) => state.weather);
+    const hourlyWeatherData: Array<any> = weatherData.data.forecast.forecastday[day]?.hour || [];
+    const currentHour: number = new Date().getHours();
+
     if (!weatherData) {
-        return null; 
+        return null;
     }
 
-    const filteredHours = hourlyWeatherData.filter(item => {
-        const hour = parseInt(item.time.slice(11, 13), 10);
+    const filteredHours: Array<any> = hourlyWeatherData.filter(item => {
+        const hour: number = parseInt(item.time.slice(11, 13), 10);
         return day === 0 ? hour >= currentHour : true;
     });
 
@@ -24,7 +26,7 @@ const HourlyWeather = ({ day = 0 }) => {
             <FlatList
                 data={filteredHours}
                 keyExtractor={(item) => item.time}
-                numColumns={numColumns} // Sütun sayısını belirle
+                numColumns={numColumns} 
                 renderItem={({ item }) => (
                     <View style={styles.item}>
                         <Text className="text-default text-xl">Saat : {item.time.slice(11, 13)}:00</Text>
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color :"white",
-        textDecorationLine : "underline"
+        color: "white",
+        textDecorationLine: "underline"
     }
 });

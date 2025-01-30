@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
-import { View, Button, Pressable, StyleSheet, Text } from 'react-native';
-interface PaginationProps {
-    currentPage: number;
-    onNextPage: () => void;
-    onPreviousPage: () => void;
-}
-const DayPagination: React.FC<PaginationProps> = ({ currentPage, onNextPage, onPreviousPage }) => {
+import { View, Pressable, StyleSheet, Text } from 'react-native';
+import { PaginationProps } from '../interfaces/Pagination';
+
+const DayPagination: FC<PaginationProps> = ({ currentPage, onNextPage, onPreviousPage, forecastDays }) => {
+    const totalPages = forecastDays > 1 ? forecastDays - 1 : 0;
     return (
         <View className="absolute bottom-[50%] left-0 right-0 flex-row justify-between px-4">
             <View className="justify-start">
@@ -20,7 +18,7 @@ const DayPagination: React.FC<PaginationProps> = ({ currentPage, onNextPage, onP
                 )}
             </View>
             <View className="justify-end">
-                {currentPage < 6 && (
+                {currentPage < totalPages && (
                     <Pressable
                         onPress={onNextPage}
                         className="transform scale-150"

@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../redux/store';
 import translate from 'googletrans';
 import translateWeatherCondition from '../utilities/LocalizedConditions';
+import { ForecastDayProp } from '../interfaces/weather-interface';
 
-const CurrentWeather = ({ day = 0 }) => {
+const CurrentWeather: React.FC<ForecastDayProp> = ({ day = 0 }) => {
     const [translatedLocationCountry, setTranslatedLocationCountry] = useState('');
     const weatherData = useAppSelector((state) => state.weather);
     const currentWeatherData = weatherData.data.forecast.forecastday[day];

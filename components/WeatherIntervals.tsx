@@ -3,13 +3,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { View } from 'react-native';
 import { WeatherIntervalsProps } from '../interfaces/weather-interface';
 
-const WeatherIntervals: React.FC<WeatherIntervalsProps> = ({ forecastDays, setForecastDays, setCurrentPage, open, setIsDropdownOpen }) => {
-  const handleSelectForecastDays = (value : any) => {
-    setForecastDays(value);
-    if (value > 1) {
-      setCurrentPage(0);  // Only reset page if forecastDays > 1
-    }
-  };
+const WeatherIntervals: React.FC<WeatherIntervalsProps> = ({ forecastDays, setForecastDays, open, setIsDropdownOpen }) => {
   return (
     <View className="mb-4 px-4">
       <DropDownPicker
@@ -17,7 +11,7 @@ const WeatherIntervals: React.FC<WeatherIntervalsProps> = ({ forecastDays, setFo
         value={forecastDays}
         items={[
           { label: 'Günlük', value: 1 },
-          { label: 'Haftalık', value: 7 },
+          { label: '3 Günlük', value: 3 },
         ]}
         setOpen={setIsDropdownOpen}
         setValue={setForecastDays}
