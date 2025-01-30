@@ -1,29 +1,23 @@
 import React, { useState, useEffect, FC } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { CityProps } from '../interfaces/cities-interface';
+import { FetchCityProps, SetCityProps } from '../interfaces/cities-interface';
 import { CitySelectorProps } from '../interfaces/cities-interface';
 import axios, { AxiosResponse } from 'axios';
 
-interface City {
-    label: string;
-    value: string;
-    name?: string;
-    id?: string;
-}
 
 
-const fetchTurkeyCities = async (): Promise<{ name: string; id: string }[]> => {
+
+const fetchTurkeyCities = async (): Promise<{ name: string, id: string }[]> => {
     try {
         const response: AxiosResponse = await axios.get('https://turkiyeapi.dev/api/v1/provinces');
-        const jsonData: { data: CityProps[] } = response.data;
-        const cityData = jsonData.data.map((city) => ({
+        const jsonData: { data: FetchCityProps[] } = response.data;
+        const cityData: { name: string, id: string }[] = jsonData.data.map((city) => ({
             label: city.name,
             value: city.name,
-            name: city.name ?? '',
+            name: city.name,
             id: city.id,
         }));
-
         return cityData;
     } catch (error) {
         console.error('Error fetching city names:', error);
@@ -32,7 +26,7 @@ const fetchTurkeyCities = async (): Promise<{ name: string; id: string }[]> => {
 };
 
 const CitySelector: FC<CitySelectorProps> = ({ onCityChange }) => {
-    const [cities, setCities] = useState<CityProps[]>([]);
+    const [cities, setCities] = useState<FetchCityProps[]>([]);
     const [selectedCity, setSelectedCity] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(true);
 
@@ -52,16 +46,16 @@ const CitySelector: FC<CitySelectorProps> = ({ onCityChange }) => {
         fetchCities();
     }, []);
 
-    const handleCityChange = (item: City) => {
+    const handleCityChange = (item: SetCityProps) => {
         setSelectedCity(item.value);
         onCityChange(item.value);
     };
     return (
         <View style={styles.container}>
             <Dropdown
-                style={[styles.dropdown, { borderColor: 'white' }]}
+                style={[styles.dropdown, { borderColor: 'white' }]} 
                 placeholderStyle={[styles.placeholderStyle, { color: 'white' }]}
-                selectedTextStyle={[styles.selectedTextStyle, { color: 'white' }]}
+                selectedTextStyle={[styles.selectedTextStyle, {color: 'white'}]}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={cities}

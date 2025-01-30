@@ -1,8 +1,11 @@
-export interface CityProps {
+export interface FetchCityProps {
+    name: string;
+    id: string;
+}
+
+export interface SetCityProps {
     label: string;
     value: string;
-    name?: string;
-    id?: string;
 }
 
 export interface CitySelectorProps {
