@@ -13,14 +13,17 @@ interface City {
 }
 
 
-const fetchTurkeyCities = async (): Promise<City[]> => {
+const fetchTurkeyCities = async (): Promise<{ name: string; id: string }[]> => {
     try {
         const response: AxiosResponse = await axios.get('https://turkiyeapi.dev/api/v1/provinces');
         const jsonData: { data: CityProps[] } = response.data;
-        const cityData: City[] = jsonData.data.map((city) => ({
+        const cityData = jsonData.data.map((city) => ({
             label: city.name,
             value: city.name,
+            name: city.name ?? '',
+            id: city.id,
         }));
+
         return cityData;
     } catch (error) {
         console.error('Error fetching city names:', error);
@@ -56,9 +59,9 @@ const CitySelector: FC<CitySelectorProps> = ({ onCityChange }) => {
     return (
         <View style={styles.container}>
             <Dropdown
-                style={[styles.dropdown, { borderColor: 'white' }]} 
+                style={[styles.dropdown, { borderColor: 'white' }]}
                 placeholderStyle={[styles.placeholderStyle, { color: 'white' }]}
-                selectedTextStyle={[styles.selectedTextStyle, {color: 'white'}]}
+                selectedTextStyle={[styles.selectedTextStyle, { color: 'white' }]}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={cities}

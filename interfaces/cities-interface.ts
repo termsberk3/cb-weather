@@ -1,6 +1,8 @@
 export interface CityProps {
-    name: string;
-    id: string
+    label: string;
+    value: string;
+    name?: string;
+    id?: string;
 }
 
 export interface CitySelectorProps {

@@ -74,3 +74,7 @@ export interface WeatherIntervalsProps {
   open: boolean;
   setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface ForecastDayProp {
+  day?: number;
+}
